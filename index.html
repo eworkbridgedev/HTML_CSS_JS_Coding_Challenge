@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+			<title>Join the mailing list</title>
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+		<script type='text/javascript' src='jquery.min.js'></script>
+		<link rel="stylesheet" href="style.css">
+		
+    </head>
+	
+<!-- JavaScript Code -->
+	<script>
+		$(document).ready(function() {
+			<!-- Real-time Validation -->
+			
+				<!--Email must be an email -->
+				$('#contact_email').on('input', function() {
+					var input=$(this);
+					var re = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+					var is_email=re.test(input.val());
+					if(is_email){input.removeClass("invalid").addClass("valid filled");}
+					else{input.removeClass("valid filled").addClass("invalid");}
+				});
+			<!-- After Form Submitted Validation-->
+			$("#contact_submit button").click(function(event){
+				event.preventDefault();
+				var error_free=true;
+					var element= $('#contact_email');
+					var valid=element.hasClass("valid");
+					var error_element=$("span", element.parent());
+				   if(element.val() == ''){
+						$('.email-sucess span').hide();
+						error_element.html('Enter Email First');	
+						error_element.removeClass("error").addClass("error_show"); error_free=false;
+					 }
+					 else{
+					 if (!valid){
+					  $('.email-sucess span').hide();
+					  error_element.html('Enter Valid Email Address');
+					 error_element.removeClass("error").addClass("error_show"); error_free=false;}
+						else{error_element.removeClass("error_show").addClass("error");}
+					}
+				
+				if (!error_free){
+					event.preventDefault(); 
+				}
+				else{
+					
+						 var settings = {
+							  "async": true,
+							  "crossDomain": true,
+							  "url": "https://api.staging.fourthwall.com/api/mailing-list",
+							  "method": "POST",
+							  "headers": {
+								"content-type": "application/json",
+								"X-ShopId": 'sh_9f57832f-456b-44f3-888f-8a370b155a18'
+							  },
+							  "data": JSON.stringify({
+								"email" : $('#contact_email').val()
+							  })
+							}
+
+							$.ajax(settings).done(function (response) {
+								$('.email-sucess span').show();
+							});
+						 
+				}
+			});
+		
+		});
+	</script>
+	
+    <body>
+		<div class="subscription-section">
+			<div class="email-head">
+				<h4>Join the mailing list</h4>
+			</div>
+			<div class="email-sucess"> 
+				<span class="sucess" style="display:none;">Thanks For Subscription !</span>
+			</div>		
+			<div class="form-box">
+					
+				<form id="contact" method="post" action="">
+					<!-- Email -->
+					<div class="email-field">
+							<input type="email" id="contact_email" name="email" ></input>
+							<label for="contact_email" class="input__label">Your email</label>
+							<span class="error">A valid email address is required</span>				
+							
+							<!-- Submit Button -->
+							<div id="contact_submit">				
+								<button type="submit">Submit</button>
+							</div>
+
+					</div>
+					
+				</form>
+			</div>
+
+		</div>
+	</body>
+</html>
+
+      
+    
+
